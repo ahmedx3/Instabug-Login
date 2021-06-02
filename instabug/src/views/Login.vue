@@ -71,11 +71,23 @@
                   </v-col>
                 </v-row>
                 <v-container class="mx-2">
+                  <v-row v-if="worngEmailOrPass">
+                    <v-alert color="red" text dense width="100%">
+                      Your email and/or password are incorrect
+                    </v-alert>
+                  </v-row>
                   <v-row>
                     <h6 class="subtitle-1">Work Email</h6>
                   </v-row>
                   <v-row>
-                    <v-text-field dense outlined single-line label="you@company.com"></v-text-field>
+                    <v-text-field
+                      dense
+                      outlined
+                      single-line
+                      label="you@company.com"
+                      v-model="email"
+                      :rules="[rules.required, rules.email]"
+                    ></v-text-field>
                   </v-row>
                   <v-row>
                     <h6 class="subtitle-1">Password</h6>
@@ -83,10 +95,26 @@
                     <h6 class="subtitle-1 gray--text">Forgot password?</h6>
                   </v-row>
                   <v-row>
-                    <v-text-field dense outlined single-line label="8+ Characters"></v-text-field>
+                    <v-text-field
+                      class="mb-2"
+                      dense
+                      outlined
+                      single-line
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :type="showPassword ? 'text' : 'password'"
+                      @click:append="showPassword = !showPassword"
+                      label="8+ Characters"
+                      v-model="password"
+                      :rules="[rules.required, rules.passwordMatchEmail, rules.passwordCorrect]"
+                    ></v-text-field>
                   </v-row>
                   <v-row justify="center" align="center" class="mt-0 mb-2">
-                    <v-btn width="100%" color="primary" height="40">Log in</v-btn>
+                    <v-btn width="100%" color="primary" height="40" disabled v-if="!valid"
+                      >Log in</v-btn
+                    >
+                    <v-btn width="100%" color="primary" height="40" v-else @click="loginAction"
+                      >Log in</v-btn
+                    >
                   </v-row>
                   <v-row justify="center" align="center">
                     <h6 class="subtitle-1">Don't have an account?</h6>
@@ -127,9 +155,33 @@
 </template>
 
 <script>
+import usersData from '../data/Users.json';
+
 export default {
   data() {
     return {
+      email: '',
+      password: '',
+      showPassword: false,
+      enableLogin: false,
+      worngEmailOrPass: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || 'Enter a valid email address';
+        },
+        passwordCorrect: value => {
+          const pattern = /^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/;
+          return (
+            pattern.test(value) ||
+            'Password must be 8 characters or more with at least one uppercase letter and one number'
+          );
+        },
+        passwordMatchEmail: value => {
+          return this.email.split('@')[0] !== value || 'Password must be different from email';
+        },
+      },
       valid: false,
       colors: ['#002276', '#002276', '#002276'],
       images: [
@@ -155,6 +207,22 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    loginAction() {
+      const emailFound = usersData.find(o => o.email === this.email);
+      if (emailFound) {
+        if (this.password === emailFound.password) {
+          console.log('Logged In');
+        } else {
+          this.worngEmailOrPass = true;
+          console.log('Invalid pass');
+        }
+      } else {
+        this.worngEmailOrPass = true;
+        console.log('Invalid email');
+      }
+    },
   },
 };
 </script>
