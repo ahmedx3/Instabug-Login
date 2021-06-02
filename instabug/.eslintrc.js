@@ -17,6 +17,10 @@ module.exports = {
     'operator-linebreak': 'off',
     'arrow-body-style': 'off',
     'global-require': 'off',
+    'object-shorthand': 'off',
+    'func-names': 'off',
+    'no-unused-vars': 'off',
+    'space-before-function-paren': 'off',
   },
   overrides: [
     {

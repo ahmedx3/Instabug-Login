@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col class="hidden-md-and-down pa-0">
+    <v-col class="hidden-sm-and-down pa-0">
       <v-carousel cycle height="100%" hide-delimiter-background show-arrows-on-hover>
         <v-carousel-item v-for="(slide, i) in slides" :key="i">
           <v-sheet :color="colors[i]" height="100%">
@@ -9,7 +9,7 @@
               <v-row justify="center" align="center" class="mt-15"> </v-row>
               <v-row justify="center" align="center" class="mt-15">
                 <v-col class="text-center" cols="8">
-                  <v-img :src="slide.image" max></v-img>
+                  <v-img :src="slide.image" max-width="500"></v-img>
                 </v-col>
                 <!-- <v-img :src="slide.image" class="ma-16"></v-img> -->
               </v-row>
@@ -109,7 +109,7 @@
                     ></v-text-field>
                   </v-row>
                   <v-row justify="center" align="center" class="mt-0 mb-2">
-                    <v-btn width="100%" color="primary" height="40" disabled v-if="!valid"
+                    <v-btn width="100%" color="primary" height="40" disabled v-if="!enableLogin"
                       >Log in</v-btn
                     >
                     <v-btn width="100%" color="primary" height="40" v-else @click="loginAction"
@@ -236,6 +236,27 @@ export default {
     if (localStorage.getItem('user')) {
       this.$router.push('/welcome');
     }
+  },
+  computed: {
+    changeData() {
+      const { password, email } = this;
+      return {
+        password,
+        email,
+      };
+    },
+  },
+  watch: {
+    changeData: {
+      handler: function(val) {
+        if (this.email !== '' && this.password !== '') {
+          this.enableLogin = true;
+        } else {
+          this.enableLogin = false;
+        }
+      },
+      deep: true,
+    },
   },
 };
 </script>
