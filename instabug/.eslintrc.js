@@ -16,7 +16,7 @@ module.exports = {
     'arrow-parens': 'off',
     'operator-linebreak': 'off',
     'arrow-body-style': 'off',
-    'global-require': 'off'
+    'global-require': 'off',
   },
   overrides: [
     {

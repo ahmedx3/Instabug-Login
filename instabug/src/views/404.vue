@@ -1,5 +1,9 @@
 <template>
-  <h1>404</h1>
+  <div>
+    <v-btn depressed color="red">
+      404
+    </v-btn>
+  </div>
 </template>
 
 <script>

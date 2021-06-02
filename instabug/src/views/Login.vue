@@ -214,6 +214,14 @@ export default {
       if (emailFound) {
         if (this.password === emailFound.password) {
           console.log('Logged In');
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              email: this.email,
+              password: this.password,
+            }),
+          );
+          this.$router.push('/welcome');
         } else {
           this.worngEmailOrPass = true;
           console.log('Invalid pass');
@@ -223,6 +231,11 @@ export default {
         console.log('Invalid email');
       }
     },
+  },
+  beforeCreate() {
+    if (localStorage.getItem('user')) {
+      this.$router.push('/welcome');
+    }
   },
 };
 </script>

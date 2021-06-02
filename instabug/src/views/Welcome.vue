@@ -1,11 +1,29 @@
 <template>
   <div>
-    <v-card-title class="black--text display-1">welcome</v-card-title>
+    welcome
+    <v-btn depressed color="primary" @click="logOutAction">
+      Log out
+    </v-btn>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    logOutAction() {
+      localStorage.removeItem('user');
+      this.$router.push('/login');
+    },
+  },
+  beforeCreate() {
+    if (!localStorage.getItem('user')) {
+      this.$router.push('/login');
+    }
+  },
+};
 </script>
 
 <style></style>
