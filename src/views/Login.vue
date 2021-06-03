@@ -245,9 +245,11 @@ export default {
       }
     },
   },
-  beforeCreate() {
+  beforeRouteEnter(to, from, next) {
     if (localStorage.getItem('user')) {
-      this.$router.push('/welcome');
+      next({ name: 'Welcome' });
+    } else {
+      next();
     }
   },
   computed: {

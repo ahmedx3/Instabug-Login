@@ -28,9 +28,11 @@ export default {
       this.$router.push('/login');
     },
   },
-  beforeCreate() {
+  beforeRouteEnter(to, from, next) {
     if (!localStorage.getItem('user')) {
-      this.$router.push('/login');
+      next({ name: 'Login' });
+    } else {
+      next();
     }
   },
   created() {
