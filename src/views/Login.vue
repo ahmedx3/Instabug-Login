@@ -1,164 +1,55 @@
 <template>
   <v-row>
-    <v-col class="hidden-sm-and-down pa-0">
-      <v-carousel cycle height="100%" hide-delimiter-background show-arrows-on-hover>
-        <v-carousel-item v-for="(slide, i) in slides" :key="i">
-          <v-sheet :color="colors[i]" height="100%">
-            <v-container>
-              <v-row justify="center" align="center" class="mt-15"> </v-row>
-              <v-row justify="center" align="center" class="mt-15"> </v-row>
-              <v-row justify="center" align="center" class="mt-15">
-                <v-col class="text-center" cols="8">
-                  <v-img :src="slide.image" max-width="500"></v-img>
-                </v-col>
-                <!-- <v-img :src="slide.image" class="ma-16"></v-img> -->
-              </v-row>
-              <v-row align="center" justify="center">
-                <div class="ma-5 pa-4 headline font-weight-light white--text text-center">
-                  {{ slide.text }} Slide
-                </div>
-              </v-row>
-            </v-container>
-          </v-sheet>
-        </v-carousel-item>
-      </v-carousel>
+    <v-col class="hidden-sm-and-down pa-0 ">
+      <carousel></carousel>
     </v-col>
     <v-col>
       <v-container class="fill-height">
         <v-row justify="center" class="ma-0 pa-0">
           <v-col cols="9" class="ma-0 pa-0">
             <v-card color="white" elevation="0" class="px-10">
-              <v-form v-model="valid">
-                <v-row justify="center" align="center" class="text-h3 font-weight-medium my-4 pa-0">
-                  <v-col cols="12" class="text-center">
-                    <v-img class="mb-3" height="50px" contain src="@/assets/logo.svg" /><v-img />
-                    <h1 class="display-1">Log in to Instabug</h1>
-                  </v-col>
-                </v-row>
-                <v-row no-gutters justify="center" align="center" class="py-2 text-h4">
-                  <v-btn width="100%" color="#4285F4" class="ma-1 white--text" height="40">
-                    <v-icon left dark>
-                      mdi-google
-                    </v-icon>
-                    <v-spacer></v-spacer>
-                    Google
-                    <v-spacer></v-spacer>
-                  </v-btn>
-                  <v-btn width="100%" color="#333333" class="ma-1 white--text" height="40">
-                    <v-icon left dark>
-                      mdi-github
-                    </v-icon>
-                    <v-spacer></v-spacer>
-                    Github
-                    <v-spacer></v-spacer>
-                  </v-btn>
-                  <v-btn width="100%" color="white" class="ma-1 white--text" height="40">
-                    <v-icon left dark color="black">
-                      mdi-microsoft
-                    </v-icon>
-                    <v-spacer></v-spacer>
-                    <v-card-text class="black--text">Microsoft</v-card-text>
-                    <v-spacer></v-spacer>
-                  </v-btn>
-                </v-row>
-                <v-row justify="center" align="center" class="text-h3 font-weight-medium my-4 pa-0">
-                  <v-col>
-                    <v-divider></v-divider>
-                  </v-col>
-                  <h1 class="title font-weight-bold">OR</h1>
-                  <v-col>
-                    <v-divider></v-divider>
-                  </v-col>
-                </v-row>
-                <v-container class="mx-2">
-                  <v-row v-if="worngEmailOrPass">
-                    <v-alert color="red" text dense width="100%" id="emailNotExist">
-                      Your email and/or password are incorrect
-                    </v-alert>
-                  </v-row>
-                  <v-row>
-                    <h6 class="subtitle-1">Work Email</h6>
-                  </v-row>
-                  <v-row>
-                    <v-text-field
-                      class="emailField"
-                      dense
-                      outlined
-                      single-line
-                      label="you@company.com"
-                      v-model="email"
-                      :rules="[rules.required, rules.email]"
-                    ></v-text-field>
-                  </v-row>
-                  <v-row>
-                    <h6 class="subtitle-1">Password</h6>
-                    <v-spacer></v-spacer>
-                    <h6 class="subtitle-1 gray--text">Forgot password?</h6>
-                  </v-row>
-                  <v-row>
-                    <v-text-field
-                      class="mb-2"
-                      dense
-                      outlined
-                      single-line
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      :type="showPassword ? 'text' : 'password'"
-                      @click:append="showPassword = !showPassword"
-                      label="8+ Characters"
-                      v-model="password"
-                      :rules="[rules.required, rules.passwordMatchEmail, rules.passwordCorrect]"
-                    ></v-text-field>
-                  </v-row>
-                  <v-row justify="center" align="center" class="mt-0 mb-2">
-                    <v-btn
-                      width="100%"
-                      color="primary"
-                      height="40"
-                      disabled
-                      v-if="!enableLogin"
-                      id="loginBTN"
-                      >Log in</v-btn
-                    >
-                    <v-btn
-                      width="100%"
-                      color="primary"
-                      height="40"
-                      v-else
-                      @click="loginAction"
-                      id="loginBTN"
-                      >Log in</v-btn
-                    >
-                  </v-row>
-                  <v-row justify="center" align="center">
-                    <h6 class="subtitle-1">Don't have an account?</h6>
-                    <h6 class="subtitle-1 blue--text ml-2">Sign up</h6>
-                    <v-spacer></v-spacer>
-                    <h6 class="subtitle-1 blue--text">Login via SSO</h6>
-                  </v-row>
-                  <v-row>
-                    <v-col class="text-center">
-                      <h2 class="subtitle-1 grey--text text--darken-1">
-                        Trusted by the top companies.
-                      </h2>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <v-row justify="center" align="center">
-                  <v-col cols="2">
-                    <v-img height="25px" contain src="../assets/Lyft_logo.svg" /><v-img />
-                  </v-col>
-                  <v-col cols="2">
-                    <v-img height="25px" contain src="../assets/BuzzFeed.svg" /><v-img />
-                  </v-col>
-                  <v-col cols="2">
-                    <v-img height="25px" contain src="../assets/Asana_logo.svg" /><v-img />
-                  </v-col>
-                  <v-col cols="2">
-                    <v-img height="25px" contain src="../assets/oneplus.svg" /><v-img />
-                  </v-col>
-                </v-row>
-                <v-container class=""> </v-container>
-              </v-form>
+              <v-row justify="center" align="center" class="text-h3 font-weight-medium my-4 pa-0">
+                <v-col cols="12" class="text-center">
+                  <v-img class="mb-3" height="50px" contain src="@/assets/logo.svg" /><v-img />
+                  <h1 class="display-1">Log in to Instabug</h1>
+                </v-col>
+              </v-row>
+              <v-row no-gutters justify="center" align="center" class="py-2 text-h4">
+                <v-btn width="100%" color="#4285F4" class="ma-1 white--text" height="40">
+                  <v-icon left dark>
+                    mdi-google
+                  </v-icon>
+                  <v-spacer></v-spacer>
+                  Google
+                  <v-spacer></v-spacer>
+                </v-btn>
+                <v-btn width="100%" color="#333333" class="ma-1 white--text" height="40">
+                  <v-icon left dark>
+                    mdi-github
+                  </v-icon>
+                  <v-spacer></v-spacer>
+                  Github
+                  <v-spacer></v-spacer>
+                </v-btn>
+                <v-btn width="100%" color="white" class="ma-1 white--text" height="40">
+                  <v-icon left dark color="black">
+                    mdi-microsoft
+                  </v-icon>
+                  <v-spacer></v-spacer>
+                  <v-card-text class="black--text">Microsoft</v-card-text>
+                  <v-spacer></v-spacer>
+                </v-btn>
+              </v-row>
+              <v-row justify="center" align="center" class="text-h3 font-weight-medium my-4 pa-0">
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+                <h1 class="title font-weight-bold">OR</h1>
+                <v-col>
+                  <v-divider></v-divider>
+                </v-col>
+              </v-row>
+              <Form></Form>
             </v-card>
           </v-col>
         </v-row>
@@ -168,83 +59,12 @@
 </template>
 
 <script>
-import usersData from '../data/Users.json';
+import Carousel from '../components/Carousel.vue';
+import Form from '../components/Form.vue';
 
 export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      showPassword: false,
-      enableLogin: false,
-      worngEmailOrPass: false,
-      rules: {
-        required: value => !!value || 'Required.',
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || 'Enter a valid email address';
-        },
-        passwordCorrect: value => {
-          const pattern = /^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/;
-          return (
-            pattern.test(value) ||
-            'Password must be 8 characters or more with at least one uppercase letter and one number'
-          );
-        },
-        passwordMatchEmail: value => {
-          return this.email.split('@')[0] !== value || 'Password must be different from email';
-        },
-      },
-      valid: false,
-      colors: ['#002276', '#002276', '#002276'],
-      images: [
-        '../assets/Product-overview.svg',
-        '../assets/Products-bug-reporting.svg',
-        '../assets/Products-crash-reporting.svg',
-      ],
-      slides: [
-        {
-          text: 'Accelerate Your Entire Mobile Team Workflow',
-          // eslint-disable-next-line global-require
-          image: require('@/assets/Product-overview.svg'),
-        },
-        {
-          text: 'The Most Comprehensive Bug Reporting Tool for Mobile Apps',
-          // eslint-disable-next-line global-require
-          image: require('@/assets/Products-bug-reporting.svg'),
-        },
-        {
-          text: 'Secure Crach Reporting With Real-Time Alerts',
-          // eslint-disable-next-line global-require
-          image: require('@/assets/Products-crash-reporting.svg'),
-        },
-      ],
-    };
-  },
-  methods: {
-    loginAction() {
-      const emailFound = usersData.find(o => o.email === this.email);
-      if (emailFound) {
-        if (this.password === emailFound.password) {
-          console.log('Logged In');
-          localStorage.setItem(
-            'user',
-            JSON.stringify({
-              email: this.email,
-              password: this.password,
-            }),
-          );
-          this.$router.push('/welcome');
-        } else {
-          this.worngEmailOrPass = true;
-          console.log('Invalid pass');
-        }
-      } else {
-        this.worngEmailOrPass = true;
-        console.log('Invalid email');
-      }
-    },
-  },
+  components: { Carousel, Form },
+
   beforeRouteEnter(to, from, next) {
     if (localStorage.getItem('user')) {
       next({ name: 'Welcome' });
@@ -252,32 +72,5 @@ export default {
       next();
     }
   },
-  computed: {
-    changeData() {
-      const { password, email } = this;
-      return {
-        password,
-        email,
-      };
-    },
-  },
-  watch: {
-    changeData: {
-      handler: function(val) {
-        if (this.email !== '' && this.password !== '') {
-          this.enableLogin = true;
-        } else {
-          this.enableLogin = false;
-        }
-      },
-      deep: true,
-    },
-  },
 };
 </script>
-
-<style scoped>
-.v-carousel__controls {
-  bottom: 10%;
-}
-</style>
