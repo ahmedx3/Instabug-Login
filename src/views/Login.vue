@@ -72,7 +72,7 @@
                 </v-row>
                 <v-container class="mx-2">
                   <v-row v-if="worngEmailOrPass">
-                    <v-alert color="red" text dense width="100%">
+                    <v-alert color="red" text dense width="100%" id="emailNotExist">
                       Your email and/or password are incorrect
                     </v-alert>
                   </v-row>
@@ -81,6 +81,7 @@
                   </v-row>
                   <v-row>
                     <v-text-field
+                      class="emailField"
                       dense
                       outlined
                       single-line
@@ -109,10 +110,22 @@
                     ></v-text-field>
                   </v-row>
                   <v-row justify="center" align="center" class="mt-0 mb-2">
-                    <v-btn width="100%" color="primary" height="40" disabled v-if="!enableLogin"
+                    <v-btn
+                      width="100%"
+                      color="primary"
+                      height="40"
+                      disabled
+                      v-if="!enableLogin"
+                      id="loginBTN"
                       >Log in</v-btn
                     >
-                    <v-btn width="100%" color="primary" height="40" v-else @click="loginAction"
+                    <v-btn
+                      width="100%"
+                      color="primary"
+                      height="40"
+                      v-else
+                      @click="loginAction"
+                      id="loginBTN"
                       >Log in</v-btn
                     >
                   </v-row>
